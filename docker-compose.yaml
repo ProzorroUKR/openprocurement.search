@@ -1,0 +1,18 @@
+version: '3'
+services:
+  search_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8484:8484"
+    volumes:
+      - "./:/app:delegated"
+    command: ["gunicorn", "-c", "/app/etc/gunicorn.conf", "--paste", "/app/etc/search.ini"]
+  index_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    - "./:/app:delegated"
+    command: ["index_worker", "/app/etc/search.ini"]
