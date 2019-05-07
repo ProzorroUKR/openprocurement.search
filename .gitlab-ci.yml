@@ -1,0 +1,29 @@
+image: docker:stable
+stages:
+  - test
+  - push
+
+test:
+  image: python:2.7
+  stage: test
+  before_script:
+    - easy_install distribute
+    - pip install setuptools==33.1.1
+    - pip install -r requirements.txt
+    - pip install -e .
+  script:
+    - test_index etc/search.ini
+
+docker_build:
+  stage: push
+  tags:
+    - shell
+  only:
+    - tags
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - LATEST_MASTER_COMMIT=$(git log -n 1 origin/master --pretty=format:"%H")
+    - if [ "$LATEST_MASTER_COMMIT" = "$CI_COMMIT_SHA" ]; then EXTRA_TAGS="-t $CI_REGISTRY_IMAGE:latest"; fi
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG $EXTRA_TAGS .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - if [ "$LATEST_MASTER_COMMIT" = "$CI_COMMIT_SHA" ]; then docker push $CI_REGISTRY_IMAGE:latest; fi
