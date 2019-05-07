@@ -1,4 +1,4 @@
-FROM python:2.7-slim-jessie
+FROM python:2.7
 
 RUN mkdir /app /app/var /app/var/run
 RUN mkdir /app/var/edrpou \
