@@ -479,6 +479,11 @@
               }
             }
           }
+        },
+        "tender_id": {
+          "analyzer": "whitespace_lower",
+          "include_in_all": true,
+          "type": "string"
         }
       }
     }
