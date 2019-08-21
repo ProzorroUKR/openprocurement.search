@@ -95,6 +95,12 @@ match_map = {
     'asset_edrpou': 'assetCustodian.identifier.id',
     'lot_edrpou': 'lotCustodian.identifier.id',
     'edrpou': 'procuringEntity.identifier.id',
+    'plan_edrpou': [
+        'procuringEntity.identifier.id',
+        'buyers.identifier.id'
+    ],
+    'plan_pe_edrpou': 'procuringEntity.identifier.id',
+    'plan_buyers_edrpou': 'buyers.identifier.id',
     'procedure': 'procurementMethod',
     'proc_type': 'procurementMethodType',
     'proc_rationale': 'procurementMethodRationale',
@@ -285,6 +291,12 @@ def append_dates_query(body, query, args):
     body.append(match)
 
 
+def prepare_query(query_func, query, field, **kwargs):
+    if isinstance(field, (list, tuple)):
+        return {'bool': {'should': [query_func(query, f, **kwargs) for f in field]}}
+    return query_func(query, field, **kwargs)
+
+
 # build query body
 
 
@@ -301,7 +313,7 @@ def prepare_search_body(args, default_sort='dateModified', source_fields=None):
             continue
         field = prefix_map[key]
         query = args.getlist(key)
-        match = prefix_query(query, field,
+        match = prepare_query(prefix_query, query, field,
             force_lower=force_lower)
         body.append(match)
 
@@ -311,7 +323,7 @@ def prepare_search_body(args, default_sort='dateModified', source_fields=None):
             continue
         field = match_map[key]
         query = args.getlist(key)
-        match = match_query(query, field,
+        match = prepare_query(match_query, query, field,
             operator='or',
             analyzer='whitespace',
             force_lower=force_lower)
@@ -323,7 +335,7 @@ def prepare_search_body(args, default_sort='dateModified', source_fields=None):
             continue
         field = float_range_map[key]
         query = args.getlist(key)
-        match = range_query(query, field, force_float=True)
+        match = prepare_query(range_query, query, field, force_float=True)
         body.append(match)
 
     # str range values ie postal code
@@ -332,7 +344,7 @@ def prepare_search_body(args, default_sort='dateModified', source_fields=None):
             continue
         field = str_range_map[key]
         query = args.getlist(key)
-        match = range_query(query, field, force_float=False)
+        match = prepare_query(range_query, query, field, force_float=False)
         body.append(match)
 
     # date range
