@@ -72,6 +72,7 @@ prefix_map = {
     'plan_dkpp_like': 'additionalClassifications.id',
     'asset_cav_like': 'classification.id',
     'asset_cpvs_like': 'additionalClassifications.id',
+    'proc_rationale_like': 'procurementMethodRationale',
 }
 match_map = {
     'id': 'id',
@@ -96,6 +97,7 @@ match_map = {
     'edrpou': 'procuringEntity.identifier.id',
     'procedure': 'procurementMethod',
     'proc_type': 'procurementMethodType',
+    'proc_rationale': 'procurementMethodRationale',
     'main_proc_category': 'mainProcurementCategory',
     'asset_type': 'assetType',
     'lot_type': 'lotType',
