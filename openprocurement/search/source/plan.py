@@ -78,6 +78,9 @@ class PlanSource(BaseSource):
         if self.config['plan_decode_orgs'] and self.orgs_db:
             if 'procuringEntity' in plan['data']:
                 self.orgs_db.patch_entity(plan['data']['procuringEntity'])
+            if 'buyers' in plan['data']:
+                for buyer in plan['data']['buyers']:
+                    self.orgs_db.patch_entity(buyer)
         return plan
 
     def need_reset(self):
