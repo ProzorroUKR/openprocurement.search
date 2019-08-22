@@ -1,3 +1,13 @@
+search-tenders (0.8.2) stable; urgency=low
+
+ *  Allow multifield filters using bool/should query
+ *  Add new search filters: plan_edrpou, plan_pe_edrpou, plan_buyers_edrpou,
+    rationale_like, proc_rationale_like
+ *  Update plan mappings settings, add buyers and tender_id
+ *  Update tender mappings settings, add plans
+
+ -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Aug 22 13:50:00 EET 2019
+
 search-tenders (0.8.1) stable; urgency=low
 
  *  Release of version 0.8.1
