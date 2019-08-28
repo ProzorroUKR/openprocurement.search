@@ -414,6 +414,76 @@
               }
             }
           }
+        },
+        "buyers": {
+          "include_in_all": false,
+          "properties": {
+            "identifier": {
+              "include_in_all": false,
+              "properties": {
+                "id": {
+                  "analyzer": "whitespace_lower",
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "legalName": {
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "legalName_en": {
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "scheme": {
+                  "include_in_all": false,
+                  "type": "string"
+                },
+                "uri": {
+                  "include_in_all": true,
+                  "type": "string"
+                }
+              }
+            },
+            "name": {
+              "include_in_all": true,
+              "type": "string"
+            },
+            "name_en": {
+              "include_in_all": true,
+              "type": "string"
+            },
+            "name_ru": {
+              "include_in_all": true,
+              "type": "string"
+            },
+            "registryRecord": {
+              "include_in_all": true,
+              "properties": {
+                "edrpou": {
+                  "analyzer": "whitespace_lower",
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "location": {
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "name": {
+                  "include_in_all": true,
+                  "type": "string"
+                },
+                "shortName": {
+                  "include_in_all": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tender_id": {
+          "analyzer": "whitespace_lower",
+          "include_in_all": true,
+          "type": "string"
         }
       }
     }
