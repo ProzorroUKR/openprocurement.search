@@ -247,22 +247,25 @@ def prefix_query(query, field, force_lower=False):
 def range_query(query, field, force_float=False):
     body = []
     for q in query:
-        if q.find('-') < 0:
-            if force_float:
-                q = float(q)
-                res = {"range": {field: {"gte": q}}}
+        try:
+            if q.find('-') < 0:
+                if force_float:
+                    q = float(q)
+                    res = {"range": {field: {"gte": q}}}
+                else:
+                    res = prefix_query([q], field)
+                body.append(res)
             else:
-                res = prefix_query([q], field)
-            body.append(res)
-        else:
-            beg, end = q.split('-', 1)
-            if force_float:
-                beg, end = float(beg), float(end)
-            elif 'postalCode' in field:  # FIXME
-                end += '999'
-            body.append({"range": {
-                field: {"gte": beg, "lte": end}
-            }})
+                beg, end = q.split('-', 1)
+                if force_float:
+                    beg, end = float(beg), float(end)
+                elif 'postalCode' in field:  # FIXME
+                    end += '999'
+                body.append({"range": {
+                    field: {"gte": beg, "lte": end}
+                }})
+        except ValueError as e:
+            raise ValueError("Invalid range search query")
     if len(body) == 1:
         return body[0]
     return {"bool": {"should": body}}
@@ -400,11 +403,14 @@ def search_tenders():
         limit = int(args.get('limit') or 10)
         limit = min(max(1, limit), 100)
         res = search_engine.search(body, start, limit, index_set='tenders')
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in tenders {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": "An unexpected error occurred"}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
@@ -417,11 +423,14 @@ def search_plans():
         limit = int(args.get('limit') or 10)
         limit = min(max(1, limit), 100)
         res = search_engine.search(body, start, limit, index_set='plans')
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in plans {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": "An unexpected error occurred"}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
@@ -436,11 +445,14 @@ def search_auctions():
         index_key = int(args.get('index') or 1)
         index_set = ['auctions', 'auctions2', 'auctions3'][index_key - 1]
         res = search_engine.search(body, start, limit, index_set=index_set)
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in auctions {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": "An unexpected error occurred"}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
@@ -461,11 +473,14 @@ def search_auctions_map():
             items = res.pop('items')
             res['count'] = len(items)
             res['items'] = convert_auction_map_items(items, short)
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in auctions.map {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": str(e)}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
@@ -478,11 +493,14 @@ def search_assets():
         limit = int(args.get('limit') or 10)
         limit = min(max(1, limit), 100)
         res = search_engine.search(body, start, limit, index_set='assets')
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in assets {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": "An unexpected error occurred"}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
@@ -495,11 +513,14 @@ def search_lots():
         limit = int(args.get('limit') or 10)
         limit = min(max(1, limit), 100)
         res = search_engine.search(body, start, limit, index_set='lots')
+    except ValueError as e:
+        res = {"error": str(e)}
     except Exception as e:
         search_server.logger.exception("Error in lots {}".format(e))
-        res = {"error": "{}: {}".format(type(e).__name__, e)}
-    if search_server.debug:
-        res['body'] = body
+        res = {"error": "An unexpected error occurred"}
+    else:
+        if search_server.debug:
+            res['body'] = body
     return jsonify(res)
 
 
