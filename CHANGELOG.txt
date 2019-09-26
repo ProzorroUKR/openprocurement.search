@@ -1,9 +1,14 @@
+search-tenders (0.8.3) stable; urgency=low
+
+ *  Release of version 0.8.3
+
+ -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Sep 26 13:50:00 EEST 2019
 
 search-tenders (0.8.3b1) unstable; urgency=low
 
  * Improve search error handling and error messages
 
- -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Sep 16 20:00:00 EET 2019
+ -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Sep 16 20:00:00 EEST 2019
 
 search-tenders (0.8.2) stable; urgency=low
 
@@ -13,7 +18,7 @@ search-tenders (0.8.2) stable; urgency=low
  *  Update plan mappings settings, add buyers and tender_id
  *  Update tender mappings settings, add plans
 
- -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Aug 22 13:50:00 EET 2019
+ -- Kuznietsov Oleksii <smithumble@gmail.com>  Sat Aug 22 13:50:00 EEST 2019
 
 search-tenders (0.8.1) stable; urgency=low
 
